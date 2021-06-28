@@ -7,7 +7,8 @@ import 'package:travel_app/Models/CustomWidgetModels/MenuItemModel.dart';
 import '../../Authentication/LoginScreen.dart';
 
 class SettingsDialog extends StatefulWidget {
-  const SettingsDialog({Key key}) : super(key: key);
+  SettingsDialog(this.refreshFunction);
+  final VoidCallback refreshFunction;
 
   @override
   _SettingsDialogState createState() => _SettingsDialogState();
@@ -94,8 +95,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
                       String menuItem = menuItems[index].itemName;
                       if (menuItem == "Logout") {
                         await FirebaseAuth.instance.signOut();
+                        Constants.user=null;
+      Constants.loggedInStatus=false;
+                        widget.refreshFunction();
                         Navigator.of(context).pop();
-                        setState(() {});
                       } else if (menuItem == "Sign In") {
                         Navigator.pushReplacement(
                             context,

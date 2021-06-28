@@ -32,7 +32,7 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
   ];
 
   void handleLogin() async {
-    if (_passwordController.text == "") {
+    if (_passwordController.text != "") {
       progress.show();
       String loginResult= await login(widget.email, _passwordController.text);
       progress.dismiss();

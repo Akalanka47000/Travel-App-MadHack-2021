@@ -18,7 +18,7 @@ class ProfileDialog extends StatelessWidget {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
           backgroundColor: Constants.theme == "Dark" ? Color(0xFF080808) : Color(0xFFf2f2f2),
           content: Container(
-            height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height * 0.5 : MediaQuery.of(context).size.height * 0.7,
+            height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height * 0.35 : MediaQuery.of(context).size.height * 0.7,
             width: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width * 0.95 : MediaQuery.of(context).size.width * 0.5,
             child: Center(
               child: SingleChildScrollView(
@@ -117,41 +117,6 @@ class ProfileDialog extends StatelessWidget {
                             ],
                           ),
                         ),
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height * 0.02, 0, MediaQuery.of(context).size.height * 0.01),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 1,
-                            width: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width * 0.15 : MediaQuery.of(context).size.width * 0.15,
-                            decoration: BoxDecoration(
-                              color: Constants.theme == "Dark" ? Colors.blue : Colors.black87,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Constants.theme == "Dark" ? Colors.blue : Colors.black87,
-                                  blurRadius: Constants.theme == "Dark" ? 2.0 : 0,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: 1,
-                            width: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width * 0.15 : MediaQuery.of(context).size.width * 0.15,
-                            decoration: BoxDecoration(
-                              color: Constants.theme == "Dark" ? Colors.blue : Colors.black87,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Constants.theme == "Dark" ? Colors.blue : Colors.black87,
-                                  blurRadius: Constants.theme == "Dark" ? 2.0 : 0,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
                     ),
                   ],

@@ -45,7 +45,7 @@ Future<String> login(String email, String password) async {
     if (e.code == 'user-not-found') {
       errorMsg='No user found for that email';
     } else if (e.code == 'wrong-password') {
-      errorMsg='Wrong password provided for that user';
+      errorMsg='Invalid password';
     }
     return errorMsg;
   }

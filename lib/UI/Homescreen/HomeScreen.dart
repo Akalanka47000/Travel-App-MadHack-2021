@@ -72,6 +72,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return searchResults;
   }
 
+  void refreshState() {
+    setState(() {});
+  }
+
   Future<bool> onBackPressed() {}
 
   @override
@@ -180,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                         ),
                                         context: context,
                                         builder: (context) {
-                                          return SettingsDialog();
+                                          return SettingsDialog(refreshState);
                                         });
                                   },
                                   child: RotationTransition(
