@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class Background extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: Column(
         children: <Widget>[
           new Stack(
             alignment: Alignment.bottomCenter,
             children: <Widget>[
-              Image.asset('assets/collaboration.png', width: MediaQuery.of(context).size.width/1.5,),
-              WavyHeader(),
+                 WavyHeader(),
             ],
           ),
-          Expanded(
-            child: Container(
-            ),
-          ),
-          Stack(
-            alignment: Alignment.bottomLeft,
-            children: <Widget>[
-              WavyFooter(),
-              CirclePink(),
-              CircleYellow(),
-            ],
-          )
+          // Expanded(
+          //   child: Container(
+          //   ),
+          // ),
+          // Stack(
+          //   alignment: Alignment.bottomLeft,
+          //   children: <Widget>[
+          //    WavyFooter(),
+          //     CirclePink(),
+          //    CircleYellow(),
+          //   ],
+          // )
         ],
       ),
     );
@@ -127,7 +127,7 @@ class TopWaveClipper extends CustomClipper<Path> {
         secondEndPoint.dx, secondEndPoint.dy);
 
     var thirdControlPoint =
-    Offset(size.width - (size.width / 9), size.height / 6);
+        Offset(size.width - (size.width / 9), size.height / 6);
     var thirdEndPoint = Offset(size.width, 0.0);
     path.quadraticBezierTo(thirdControlPoint.dx, thirdControlPoint.dy,
         thirdEndPoint.dx, thirdEndPoint.dy);

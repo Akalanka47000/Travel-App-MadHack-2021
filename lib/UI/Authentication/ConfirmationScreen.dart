@@ -3,8 +3,9 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:travel_app/Helpers/Constants.dart';
 import 'package:travel_app/Services/authService.dart';
 import 'package:travel_app/UI/Authentication/LoginScreen.dart';
+import 'package:travel_app/UI/CustomWidgets/Background.dart';
 import 'package:travel_app/UI/Homescreen/HomeScreen.dart';
-import 'package:travel_app/UI/Homescreen/Widgets/RoundedRectButton.dart';
+import 'package:travel_app/UI/CustomWidgets/RoundedRectButton.dart';
 import '../CustomWidgets/InputWidget.dart';
 
 class ConfirmationScreen extends StatefulWidget {
@@ -135,96 +136,103 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
         child: Builder(builder: (context) {
           progress = ProgressHUD.of(context);
           return Scaffold(
-            body: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [
-                  Color(0xFF1c1c1c),
-                  Color(0xFF0d0d0d),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              )),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height * 0.15),
-                      ),
-                      Container(
-                        height: MediaQuery.of(context).size.width * 0.7,
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("assets/images/Logo.png"),
+            body: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF1c1c1c),
+                          Color(0xFF0d0d0d),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      )),
+                ),
+               // Background(),
+                Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.15),
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.width * 0.7,
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage("assets/images/Logo.png"),
+                            ),
                           ),
                         ),
-                      ),
-                      widget.action == "Register"
-                          ? Column(
-                              children: [
-                                InputWidget(
-                                    0, 0, _nameController, false, "John Doe"),
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                        child: Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20),
-                                      child: Text(
-                                        'Enter name...',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Color(0xFFA0A0A0),
-                                            fontSize: 12),
-                                      ),
-                                    )),
-                                  ],
-                                ),
-                              ],
-                            )
-                          : Container(),
-                      InputWidget(0, 0, _passwordController, true, ""),
-                      Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Padding(
-                            padding: EdgeInsets.only(top: 20),
-                            child: Text(
-                              'Enter password...',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color(0xFFA0A0A0), fontSize: 12),
-                            ),
-                          )),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          if (widget.action == "Login") {
-                            handleLogin();
-                          } else {
-                            handleRegister();
-                          }
-                        },
-                        child: RoundedRectButton(
-                          widget.action == "Login" ? "Login" : "Create Account",
-                          signUpGradients,
-                          false,
+                        SizedBox(
+                          height: 20,
                         ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                    ],
+                        widget.action == "Register"
+                            ? Column(
+                                children: [
+                                  InputWidget(
+                                      0, 0, _nameController, false, "John Doe"),
+                                  Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                          child: Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 20),
+                                        child: Text(
+                                          'Enter name...',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color(0xFFA0A0A0),
+                                              fontSize: 12),
+                                        ),
+                                      )),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                        InputWidget(0, 0, _passwordController, true, ""),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 20),
+                              child: Text(
+                                'Enter password...',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color(0xFFA0A0A0), fontSize: 12),
+                              ),
+                            )),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            if (widget.action == "Login") {
+                              handleLogin();
+                            } else {
+                              handleRegister();
+                            }
+                          },
+                          child: RoundedRectButton(
+                            widget.action == "Login" ? "Login" : "Create Account",
+                            signUpGradients,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           );
         }),

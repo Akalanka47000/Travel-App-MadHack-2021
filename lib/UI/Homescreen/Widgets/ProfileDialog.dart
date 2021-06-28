@@ -16,7 +16,7 @@ class ProfileDialog extends StatelessWidget {
       child: Builder(builder: (dialogContext) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-          backgroundColor: Constants.theme == "Dark" ? Color(0xFF080808) : Color(0xFFf2f2f2),
+          backgroundColor:  Color(0xFF080808) ,
           content: Container(
             height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height * 0.35 : MediaQuery.of(context).size.height * 0.7,
             width: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.width * 0.95 : MediaQuery.of(context).size.width * 0.5,
@@ -119,6 +119,9 @@ class ProfileDialog extends StatelessWidget {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               ),

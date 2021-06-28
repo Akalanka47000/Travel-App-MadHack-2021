@@ -16,7 +16,6 @@ void main() async {
 class TravelApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Constants().initialize();
     Constants().initializeUserData();
     Paint.enableDithering = true;
     final textTheme = Theme.of(context).textTheme;

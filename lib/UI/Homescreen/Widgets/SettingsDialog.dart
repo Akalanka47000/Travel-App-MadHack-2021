@@ -28,17 +28,13 @@ class _SettingsDialogState extends State<SettingsDialog> {
       //Menu item list which is displayed when settings button is clicked
       menuItems = [
         MenuItems(
-            icon: Icons.color_lens,
-            itemName: "Change Theme [${Constants.theme}]",
-            color: Colors.blue),
-        MenuItems(
             icon: Constants.loggedInStatus ? Icons.logout : Icons.login,
-            itemName: Constants.loggedInStatus ? "Logout" : "Sign In",
+            itemName: Constants.loggedInStatus ? "Sign Out" : "Sign In",
             color: Colors.blue),
       ];
       return Container(
         height: MediaQuery.of(context).orientation == Orientation.portrait
-            ? 210
+            ? 160
             : MediaQuery.of(context).size.height * 0.32 * (menuItems.length),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -46,9 +42,8 @@ class _SettingsDialogState extends State<SettingsDialog> {
             topLeft: Radius.circular(20),
           ),
           gradient: new LinearGradient(
-            colors: Constants.theme == "Dark"
-                ? [Colors.black.withOpacity(0.95), Colors.black]
-                : [Colors.black.withOpacity(0), Colors.black.withOpacity(0.2)],
+            colors: [Colors.black.withOpacity(0.95), Colors.black]
+               ,
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -64,13 +59,12 @@ class _SettingsDialogState extends State<SettingsDialog> {
                 width: 50,
                 decoration: BoxDecoration(
                   color:
-                      Constants.theme == "Dark" ? Colors.white : Colors.black,
+                      Colors.white ,
                   boxShadow: [
                     BoxShadow(
-                      color: Constants.theme == "Dark"
-                          ? Colors.white10
-                          : Colors.black26,
-                      spreadRadius: Constants.theme == "Dark" ? 3 : 1,
+                      color:  Colors.white10
+                         ,
+                      spreadRadius:3 ,
                       blurRadius: 2,
                       offset: Offset(0, 0),
                     ),
@@ -93,10 +87,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
                   child: GestureDetector(
                     onTap: () async {
                       String menuItem = menuItems[index].itemName;
-                      if (menuItem == "Logout") {
+                      if (menuItem == "Sign Out") {
                         await FirebaseAuth.instance.signOut();
-                        Constants.user=null;
-      Constants.loggedInStatus=false;
+                        Constants.user = null;
+                        Constants.loggedInStatus = false;
                         widget.refreshFunction();
                         Navigator.of(context).pop();
                       } else if (menuItem == "Sign In") {
@@ -104,20 +98,6 @@ class _SettingsDialogState extends State<SettingsDialog> {
                             context,
                             new MaterialPageRoute(
                                 builder: (context) => LoginScreen()));
-                      } else if (menuItem ==
-                          "Change Theme [${Constants.theme}]") {
-                        if (Constants.theme == "Dark") {
-                          Constants.theme = "Light";
-                          CacheService.setTheme("Light");
-                        } else {
-                          Constants.theme = "Dark";
-                          CacheService.setTheme("Dark");
-                        }
-                        setState(() {
-                          print("Theme Changed");
-                        });
-                        setStateCallback();
-                        Navigator.of(context).pop();
                       } else {
                         Navigator.of(context).pop();
                       }
@@ -129,11 +109,10 @@ class _SettingsDialogState extends State<SettingsDialog> {
                           color: menuItems[index].color.shade100,
                           boxShadow: [
                             BoxShadow(
-                              color: Constants.theme == "Dark"
-                                  ? Colors.white10
-                                  : Colors.black.withOpacity(0.15),
-                              spreadRadius: Constants.theme == "Dark" ? 3 : 1,
-                              blurRadius: Constants.theme == "Dark" ? 2 : 5,
+                              color: Colors.white10
+                                ,
+                              spreadRadius: 3 ,
+                              blurRadius: 2,
                               offset: Offset(0, 0),
                             ),
                           ],
@@ -158,9 +137,8 @@ class _SettingsDialogState extends State<SettingsDialog> {
                       title: Text(
                         menuItems[index].itemName,
                         style: TextStyle(
-                          color: Constants.theme == "Dark"
-                              ? Colors.white
-                              : Colors.black,
+                          color: Colors.white
+                             ,
                         ),
                       ),
                     ),

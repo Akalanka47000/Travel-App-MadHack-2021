@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_glow/flutter_glow.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:travel_app/UI/Homescreen/HomeScreen.dart';
+
+import 'CustomWidgets/LoadingIndicator.dart';
 
 class splash extends StatefulWidget {
   @override
@@ -63,33 +63,7 @@ class _splashState extends State<splash> {
               0,
               MediaQuery.of(context).size.height * 0.02,
             ),
-            child: Container(
-              child: Stack(
-                children: [
-                  Transform.scale(
-                    scale:1.4,
-                    child: Center(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: SpinKitDualRing(
-                          size: MediaQuery.of(context).size.width*0.35,
-                          color: Colors.greenAccent,
-                          lineWidth: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: GlowIcon(
-                      Icons.airplanemode_active,
-                      size: MediaQuery.of(context).size.width*0.35,
-                      color: Colors.green,
-                      blurRadius: 75,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: LoadingIndicator()
           ),
         ],
       ),

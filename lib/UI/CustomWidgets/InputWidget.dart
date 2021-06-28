@@ -14,6 +14,15 @@ class InputWidget extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * 0.85,
       height: 60,
+      decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+                color: Colors.white24,
+                blurRadius: 85,
+                spreadRadius: 0
+            )
+          ]
+      ),
       child: Material(
         elevation: 10,
         color: Colors.white,
