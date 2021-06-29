@@ -19,8 +19,17 @@ class DestinationDetailScreen extends StatefulWidget {
   _DestinationDetailScreenState createState() => _DestinationDetailScreenState();
 }
 
-class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
+class _DestinationDetailScreenState extends State<DestinationDetailScreen>  {
   var progress;
+  bool _visible=true;
+  bool footerFadedOut=false;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   buildTableRow(String identifier, String value) {
     return TableRow(
@@ -46,6 +55,16 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if(!footerFadedOut){
+      Future.delayed(const Duration(milliseconds: 0), () {
+        footerFadedOut=true;
+        setState(() {
+          _visible=false;
+        });
+
+      });
+    }
+
     return ProgressHUD(
       child: Builder(
         builder: (context) {
@@ -111,7 +130,10 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                     ),
                                   );
                                 },
-                                child: DestinationImage(snapshot.data.imageURL),
+                                child: Hero(
+                                  tag:snapshot.data.id,
+                                  child: DestinationImage(snapshot.data.imageURL),
+                                ),
                               ),
                             ),
                           ),
@@ -170,7 +192,7 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                         //gradient: LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xfffbb448), Color(0xfff7892b)])
                                       ),
                                       child: Text(
-                                        Constants.user==null?"Reserve Spot":(snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
+                                        Constants.user == null ? "Reserve Spot" : (snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
                                         style: TextStyle(fontSize: 20, color: Colors.white),
                                       ),
                                     ),
@@ -178,7 +200,7 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                 )
                               : InkWell(
                                   onTap: () async {
-                                    if(Constants.user==null){
+                                    if (Constants.user == null) {
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
                                           backgroundColor: Colors.redAccent,
@@ -190,11 +212,11 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                           ),
                                         ),
                                       );
-                                    }else{
+                                    } else {
                                       if (!snapshot.data.attendees.contains(Constants.user.userID)) {
                                         if (snapshot.data.attendees.length < snapshot.data.capacity) {
                                           progress.show();
-                                          String message = await updateDestinationAttendeeList(widget.destinationID,Constants.user.userID,snapshot.data.attendees,"Add");
+                                          String message = await updateDestinationAttendeeList(widget.destinationID, Constants.user.userID, snapshot.data.attendees, "Add");
                                           progress.dismiss();
                                           if (message == "Success") {
                                             setState(() {});
@@ -237,7 +259,7 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                         }
                                       } else {
                                         progress.show();
-                                        String message = await updateDestinationAttendeeList(widget.destinationID,Constants.user.userID,snapshot.data.attendees,"remove");
+                                        String message = await updateDestinationAttendeeList(widget.destinationID, Constants.user.userID, snapshot.data.attendees, "remove");
                                         progress.dismiss();
                                         if (message == "Success") {
                                           setState(() {});
@@ -284,7 +306,7 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                         //gradient: LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xfffbb448), Color(0xfff7892b)])
                                       ),
                                       child: Text(
-                                        Constants.user==null?"Reserve Spot":(snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
+                                        Constants.user == null ? "Reserve Spot" : (snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
                                         style: TextStyle(fontSize: 20, color: Colors.white),
                                       ),
                                     ),
@@ -296,6 +318,37 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                       return LoadingIndicator();
                     }
                   },
+                ),
+                Hero(
+                  tag:"bottomVignette",
+                  child: AnimatedOpacity(
+                    opacity: _visible ? 1.0 : 0.0,
+                    duration: Duration(milliseconds: 0),
+                    child: IgnorePointer(
+                      ignoring: true,
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                            height: MediaQuery.of(context).size.height * 0.2,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.8),
+                                  Colors.black.withOpacity(1),
+                                ],
+                                stops: [
+                                  0.0,
+                                  0.5,
+                                  0.8,
+                                ],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            )),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
