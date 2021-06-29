@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:travel_app/UI/Homescreen/HomeScreen.dart';
-
 import 'CustomWidgets/LoadingIndicator.dart';
 
 class splash extends StatefulWidget {

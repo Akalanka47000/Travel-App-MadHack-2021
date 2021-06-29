@@ -11,8 +11,9 @@ class DestinationModel{
   final String imageURL;
   final List<dynamic> attendees;
   final String contact;
+  final GeoPoint location;
 
-  DestinationModel(this.id,this.name, this.description, this.capacity, this.date, this.imageURL, this.attendees, this.contact);
+  DestinationModel(this.id,this.name, this.description, this.capacity, this.date, this.imageURL, this.attendees, this.contact, this.location);
   factory DestinationModel.fromJson(Map<String,dynamic>json)
   =>_$DestinationModelFromJson(json);
 }

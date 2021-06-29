@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:travel_app/Helpers/CacheService.dart';
 import 'package:travel_app/Helpers/Constants.dart';
 import 'package:travel_app/Models/CustomWidgetModels/MenuItemModel.dart';
-
 import '../../Authentication/LoginScreen.dart';
 
 class SettingsDialog extends StatefulWidget {

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:travel_app/Models/DestinationModel.dart';
@@ -6,11 +7,10 @@ import 'package:travel_app/Services/travelService.dart';
 import 'package:travel_app/UI/CustomWidgets/DefaultCard.dart';
 import 'package:travel_app/UI/CustomWidgets/GlowText.dart';
 import 'package:travel_app/UI/CustomWidgets/LoadingIndicator.dart';
+import 'package:travel_app/UI/DestinationDisplay/Widgets/BottomDarkFooter.dart';
 import 'package:travel_app/UI/DestinationDisplay/Widgets/DestinationImage.dart';
 import 'package:travel_app/UI/DestinationDisplay/Widgets/Search.dart';
-import 'dart:async';
 import 'package:travel_app/UI/Homescreen/HomeScreen.dart';
-
 import 'DestinationDetailScreen.dart';
 import 'Widgets/BG.dart';
 
@@ -189,30 +189,7 @@ class _DestinationList extends State<DestinationList> with TickerProviderStateMi
                         ),
                         Hero(
                           tag:"bottomVignette",
-                          child: IgnorePointer(
-                            ignoring: true,
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                  height: MediaQuery.of(context).size.height * 0.2,
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.black.withOpacity(0.8),
-                                        Colors.black.withOpacity(1),
-                                      ],
-                                      stops: [
-                                        0.0,
-                                        0.5,
-                                        0.8,
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                    ),
-                                  )),
-                            ),
-                          ),
+                          child: BottomDarkFooter(),
                         ),
                         Search(searchClicked, _searchController, _searchBoxAnimation, snapshot.data),
                       ],

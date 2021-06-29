@@ -1,17 +1,12 @@
 import 'dart:async';
 import 'dart:ui';
-
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
-import 'package:travel_app/Helpers/CacheService.dart';
 import 'package:travel_app/Helpers/Constants.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:travel_app/Models/Enums.dart';
 import 'package:travel_app/UI/DestinationDisplay/DestinationList.dart';
 import 'package:travel_app/UI/Homescreen/Widgets/ProfileDialog.dart';
 import 'package:travel_app/UI/Homescreen/Widgets/SettingsDialog.dart';

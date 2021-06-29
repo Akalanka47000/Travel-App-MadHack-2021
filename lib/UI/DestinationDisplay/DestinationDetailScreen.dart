@@ -7,8 +7,10 @@ import 'package:travel_app/Services/travelService.dart';
 import 'package:travel_app/UI/CustomWidgets/ImageDisplay.dart';
 import 'package:travel_app/UI/CustomWidgets/LoadingIndicator.dart';
 import 'package:travel_app/UI/DestinationDisplay/Widgets/DestinationImage.dart';
-
+import 'package:travel_app/UI/DestinationDisplay/Widgets/DetailPageButton.dart';
+import 'package:travel_app/UI/DestinationDisplay/MapView.dart';
 import 'Widgets/BG.dart';
+import 'Widgets/BottomDarkFooter.dart';
 
 class DestinationDetailScreen extends StatefulWidget {
   const DestinationDetailScreen(this.destinationID, this.destinationName);
@@ -19,16 +21,33 @@ class DestinationDetailScreen extends StatefulWidget {
   _DestinationDetailScreenState createState() => _DestinationDetailScreenState();
 }
 
-class _DestinationDetailScreenState extends State<DestinationDetailScreen>  {
+class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
   var progress;
-  bool _visible=true;
-  bool footerFadedOut=false;
-
+  bool _visible = true;
+  bool footerFadedOut = false;
 
   @override
   void initState() {
     super.initState();
+  }
 
+
+  buildHeaderTab(String name) {
+    return Tab(
+      child: Container(
+        width: MediaQuery.of(context).size.width*0.35,
+        child: Center(
+          child: Text(
+            name,
+            style: TextStyle(
+              fontSize: 20,
+              fontFamily: 'OpenSans',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   buildTableRow(String identifier, String value) {
@@ -55,13 +74,12 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen>  {
 
   @override
   Widget build(BuildContext context) {
-    if(!footerFadedOut){
+    if (!footerFadedOut) {
       Future.delayed(const Duration(milliseconds: 0), () {
-        footerFadedOut=true;
+        footerFadedOut = true;
         setState(() {
-          _visible=false;
+          _visible = false;
         });
-
       });
     }
 
@@ -69,105 +87,128 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen>  {
       child: Builder(
         builder: (context) {
           final progress = ProgressHUD.of(context);
-          return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(60.0),
-              child: Container(
-                decoration: BoxDecoration(boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 6.0,
-                    offset: Offset(0, 0),
-                  ),
-                ]),
-                child: AppBar(
-                  elevation: 0,
-                  backgroundColor: Colors.black,
-                  shadowColor: Colors.black,
-                  automaticallyImplyLeading: false,
-                  title: Center(
-                    child: Text(
-                      widget.destinationName,
-                      style: GoogleFonts.montserrat(
-                        textStyle: TextStyle(
-                          fontSize: 22,
-                          color: Colors.white,
+          return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              appBar: PreferredSize(
+                preferredSize: new Size(MediaQuery.of(context).size.width, 90),
+                child: Container(
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 1.0,
+                      offset: Offset(0, 8),
+                    ),
+                  ]),
+                  child: AppBar(
+                    elevation: 0,
+                    backgroundColor: Colors.black,
+                    shadowColor: Colors.black,
+                    automaticallyImplyLeading: false,
+                    title: Center(
+                      child: Text(
+                        widget.destinationName,
+                        style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
+                          ),
                         ),
+                      ),
+                    ),
+                    bottom: PreferredSize(
+                      preferredSize: Size.fromHeight(30.0),
+                      child: Column(
+                        children: [
+                          TabBar(
+                            isScrollable: true,
+                            labelColor: Colors.white,
+                            unselectedLabelColor: Colors.white.withOpacity(0.3),
+                            indicatorColor: Colors.transparent,
+                            indicatorPadding: EdgeInsets.fromLTRB(13, 0, 13, 10),
+                            tabs: [
+                              buildHeaderTab("Details"),
+                              buildHeaderTab("Map"),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            body: Stack(
-              children: [
-                BG(),
-                FutureBuilder<DestinationModel>(
-                  future: getSingleDestination(widget.destinationID),
-                  builder: (BuildContext context, AsyncSnapshot<DestinationModel> snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, MediaQuery.of(context).size.height * 0.04, MediaQuery.of(context).size.width * 0.05, 0),
-                            child: Container(
-                              height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height * 0.25 : MediaQuery.of(context).size.height * 0.5,
-                              width: MediaQuery.of(context).size.width * 0.92,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 4,
-                                  spreadRadius: 0.7,
-                                  offset: Offset(0, 1),
-                                )
-                              ]),
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    new MaterialPageRoute(
-                                      builder: (context) => ImageDisplay(snapshot.data.imageURL),
+              body: Stack(
+                children: [
+                  BG(),
+                  FutureBuilder<DestinationModel>(
+                    future: getSingleDestination(widget.destinationID),
+                    builder: (BuildContext context, AsyncSnapshot<DestinationModel> snapshot) {
+                      if (snapshot.hasData) {
+                        return TabBarView(
+                          physics: NeverScrollableScrollPhysics(),
+                          children: [
+                            ListView(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, MediaQuery.of(context).size.height * 0.04, MediaQuery.of(context).size.width * 0.05, 0),
+                                  child: Container(
+                                    height: MediaQuery.of(context).orientation == Orientation.portrait ? MediaQuery.of(context).size.height * 0.25 : MediaQuery.of(context).size.height * 0.5,
+                                    width: MediaQuery.of(context).size.width * 0.92,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 4,
+                                        spreadRadius: 0.7,
+                                        offset: Offset(0, 1),
+                                      )
+                                    ]),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                            builder: (context) => ImageDisplay(snapshot.data.imageURL),
+                                          ),
+                                        );
+                                      },
+                                      child: Hero(
+                                        tag: snapshot.data.id,
+                                        child: DestinationImage(snapshot.data.imageURL),
+                                      ),
                                     ),
-                                  );
-                                },
-                                child: Hero(
-                                  tag:snapshot.data.id,
-                                  child: DestinationImage(snapshot.data.imageURL),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(30, MediaQuery.of(context).size.height * 0.03, 30, MediaQuery.of(context).size.height * 0.02),
-                              child: Text(
-                                snapshot.data.description,
-                                style: GoogleFonts.montserrat(
-                                  textStyle: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white70,
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, MediaQuery.of(context).size.height * 0.03, MediaQuery.of(context).size.width * 0.05,
-                                MediaQuery.of(context).size.height * 0.04),
-                            child: Table(
-                              border: TableBorder.all(),
-                              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                              children: [
-                                buildTableRow("Event Date", snapshot.data.date.toDate().toString().substring(0, 11)),
-                                buildTableRow("Time", snapshot.data.date.toDate().toString().substring(11, 16)),
-                                buildTableRow("Capacity", "${snapshot.data.attendees.length}/${snapshot.data.capacity} People"),
-                                buildTableRow("Contact", snapshot.data.contact),
-                              ],
-                            ),
-                          ),
-                          //Button
-                          snapshot.data.date.toDate().isBefore(DateTime.now())
-                              ? InkWell(
+                                Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(30, MediaQuery.of(context).size.height * 0.03, 30, MediaQuery.of(context).size.height * 0.02),
+                                    child: Text(
+                                      snapshot.data.description,
+                                      style: GoogleFonts.montserrat(
+                                        textStyle: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, MediaQuery.of(context).size.height * 0.03, MediaQuery.of(context).size.width * 0.05,
+                                      MediaQuery.of(context).size.height * 0.05),
+                                  child: Table(
+                                    border: TableBorder.all(),
+                                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                    children: [
+                                      buildTableRow("Event Date", snapshot.data.date.toDate().toString().substring(0, 11)),
+                                      buildTableRow("Time", snapshot.data.date.toDate().toString().substring(11, 16)),
+                                      buildTableRow("Capacity", "${snapshot.data.attendees.length}/${snapshot.data.capacity} People"),
+                                      buildTableRow("Contact", snapshot.data.contact),
+                                    ],
+                                  ),
+                                ),
+                                //Button
+                                snapshot.data.date.toDate().isBefore(DateTime.now())
+                                    ? InkWell(
                                   onTap: () {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
@@ -176,29 +217,14 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen>  {
                                       ),
                                     );
                                   },
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, MediaQuery.of(context).size.height * 0.02, MediaQuery.of(context).size.width * 0.05,
-                                        MediaQuery.of(context).size.height * 0.05),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      padding: EdgeInsets.symmetric(vertical: 15),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[700],
-                                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(color: Colors.grey[700].withAlpha(100), offset: Offset(2, 4), blurRadius: 8, spreadRadius: 2),
-                                        ],
-                                        //gradient: LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xfffbb448), Color(0xfff7892b)])
-                                      ),
-                                      child: Text(
-                                        Constants.user == null ? "Reserve Spot" : (snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
-                                        style: TextStyle(fontSize: 20, color: Colors.white),
-                                      ),
-                                    ),
+                                  child: DetailPageButton(
+                                    Constants.user == null ? "Reserve Spot" : (snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
+                                    Colors.grey[700],
+                                    0.02,
+                                    0.05,
                                   ),
                                 )
-                              : InkWell(
+                                    : InkWell(
                                   onTap: () async {
                                     if (Constants.user == null) {
                                       ScaffoldMessenger.of(context).showSnackBar(
@@ -290,67 +316,33 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen>  {
                                       }
                                     }
                                   },
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, MediaQuery.of(context).size.height * 0.02, MediaQuery.of(context).size.width * 0.05,
-                                        MediaQuery.of(context).size.height * 0.05),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      padding: EdgeInsets.symmetric(vertical: 15),
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        color: Colors.deepOrange,
-                                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                                        boxShadow: <BoxShadow>[
-                                          BoxShadow(color: Colors.deepOrange.withAlpha(100), offset: Offset(2, 4), blurRadius: 8, spreadRadius: 2),
-                                        ],
-                                        //gradient: LinearGradient(begin: Alignment.centerLeft, end: Alignment.centerRight, colors: [Color(0xfffbb448), Color(0xfff7892b)])
-                                      ),
-                                      child: Text(
-                                        Constants.user == null ? "Reserve Spot" : (snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
-                                        style: TextStyle(fontSize: 20, color: Colors.white),
-                                      ),
-                                    ),
+                                  child: DetailPageButton(
+                                    Constants.user == null ? "Reserve Spot" : (snapshot.data.attendees.contains(Constants.user.userID) ? "Leave" : "Reserve Spot"),
+                                    Colors.deepOrange,
+                                    0.02,
+                                    0.05,
                                   ),
                                 ),
-                        ],
-                      );
-                    } else {
-                      return LoadingIndicator();
-                    }
-                  },
-                ),
-                Hero(
-                  tag:"bottomVignette",
-                  child: AnimatedOpacity(
-                    opacity: _visible ? 1.0 : 0.0,
-                    duration: Duration(milliseconds: 0),
-                    child: IgnorePointer(
-                      ignoring: true,
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.transparent,
-                                  Colors.black.withOpacity(0.8),
-                                  Colors.black.withOpacity(1),
-                                ],
-                                stops: [
-                                  0.0,
-                                  0.5,
-                                  0.8,
-                                ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              ),
-                            )),
-                      ),
+                              ],
+                            ),
+                            MapView(snapshot.data.location),
+                          ],
+                        );
+                      } else {
+                        return LoadingIndicator();
+                      }
+                    },
+                  ),
+                  Hero(
+                    tag: "bottomVignette",
+                    child: AnimatedOpacity(
+                      opacity: _visible ? 1.0 : 0.0,
+                      duration: Duration(milliseconds: 0),
+                      child: BottomDarkFooter(),
                     ),
                   ),
-                ),
-              ],
+                ],
+              )
             ),
           );
         },
