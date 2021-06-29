@@ -2,13 +2,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/Models/DestinationModel.dart';
+import 'package:travel_app/UI/DestinationDisplay/DestinationDetailScreen.dart';
 
 class Search extends StatefulWidget {
   const Search(this._searchClicked, this._controller, this._searchBoxAnimation, this.destinations);
   final bool _searchClicked;
   final TextEditingController _controller;
   final Animation _searchBoxAnimation;
-  final List<dynamic> destinations;
+  final List<DestinationModel> destinations;
 
   @override
   _SearchState createState() => _SearchState();
@@ -16,10 +18,10 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
 
-  Future<List<dynamic>> getSearchResults(String pattern, var destinations) async {
-    List<dynamic> searchResults = List();
+  Future<List<DestinationModel>> getSearchResults(String pattern, List<DestinationModel> destinations) async {
+    List<DestinationModel> searchResults = List();
     for (var destination in destinations) {
-      if (destination["location"].toString().toUpperCase().contains(pattern.toUpperCase()) && pattern.length >= 4) {
+      if (destination.name.toString().toUpperCase().contains(pattern.toUpperCase()) && pattern.length >= 4) {
         searchResults.add(destination);
       }
     }
@@ -102,7 +104,7 @@ class _SearchState extends State<Search> {
                       borderRadius: BorderRadius.circular(5),
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
-                        imageUrl: suggestion["imageURL"],
+                        imageUrl: suggestion.imageURL,
                         placeholder: (context, url) => Center(
                           child: CircularProgressIndicator(
                             valueColor: new AlwaysStoppedAnimation<Color>(Colors.greenAccent),
@@ -117,7 +119,7 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                   title: Text(
-                    suggestion["location"],
+                    suggestion.name,
                     style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
                         fontSize: 17,
@@ -126,7 +128,7 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                   subtitle: Text(
-                    suggestion["date"].toDate().toString().substring(0, 11),
+                    suggestion.date.toDate().toString().substring(0, 11),
                     style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
                         color: Colors.black87,
@@ -134,7 +136,7 @@ class _SearchState extends State<Search> {
                     ),
                   ),
                   trailing: Text(
-                    suggestion["capacity"].toString(),
+                    suggestion.capacity.toString(),
                     style: GoogleFonts.montserrat(
                       textStyle: TextStyle(
                         fontSize: 17,
@@ -145,12 +147,12 @@ class _SearchState extends State<Search> {
                 );
               },
               onSuggestionSelected: (suggestion) {
-                // Navigator.pushReplacement(
-                //   context,
-                //   new MaterialPageRoute(
-                //     builder: (context) => SingleEventPage(widget.user,suggestion, widget.userRole, widget.userID, widget.preferredCategories,"SearchTab"),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                    builder: (context) => DestinationDetailScreen(suggestion.id,suggestion.name),
+                  ),
+                );
               },
               noItemsFoundBuilder: (value) {
                 return Padding(

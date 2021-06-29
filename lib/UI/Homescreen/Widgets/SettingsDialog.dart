@@ -34,7 +34,7 @@ class _SettingsDialogState extends State<SettingsDialog> {
       ];
       return Container(
         height: MediaQuery.of(context).orientation == Orientation.portrait
-            ? 160
+            ? 140
             : MediaQuery.of(context).size.height * 0.32 * (menuItems.length),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(

@@ -1,34 +1,32 @@
 import 'dart:ui';
-import 'package:travel_app/Helpers/constants.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/Models/DestinationModel.dart';
 import 'package:travel_app/Services/travelService.dart';
 import 'package:travel_app/UI/CustomWidgets/DefaultCard.dart';
+import 'package:travel_app/UI/CustomWidgets/GlowText.dart';
 import 'package:travel_app/UI/CustomWidgets/LoadingIndicator.dart';
 import 'package:travel_app/UI/DestinationDisplay/Widgets/DestinationImage.dart';
 import 'package:travel_app/UI/DestinationDisplay/Widgets/Search.dart';
 import 'dart:async';
 import 'package:travel_app/UI/Homescreen/HomeScreen.dart';
 
+import 'DestinationDetailScreen.dart';
+import 'Widgets/BG.dart';
+
 class DestinationList extends StatefulWidget {
   DestinationList(this.menuOption);
   final String menuOption;
   @override
-  _exploreScreen createState() => _exploreScreen();
+  _DestinationList createState() => _DestinationList();
 }
 
-class _exploreScreen extends State<DestinationList> with TickerProviderStateMixin {
+class _DestinationList extends State<DestinationList> with TickerProviderStateMixin {
   bool searchClicked = false;
 
   TextEditingController _searchController = TextEditingController();
   AnimationController _searchBoxFadeController;
   Animation _searchBoxAnimation;
-
-  bool loaded = false;
 
   Color searchIconColor;
 
@@ -53,8 +51,7 @@ class _exploreScreen extends State<DestinationList> with TickerProviderStateMixi
   }
 
   Future<bool> _onBackPressed() {
-    Navigator.of(context).pop();
-    Navigator.push(context, new MaterialPageRoute(builder: (context) => HomeScreen()));
+    Navigator.pushReplacement(context, new MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
   @override
@@ -83,7 +80,7 @@ class _exploreScreen extends State<DestinationList> with TickerProviderStateMixi
                 children: [
                   Center(
                     child: Text(
-                      "Explore",
+                      widget.menuOption,
                       style: GoogleFonts.montserrat(
                         textStyle: TextStyle(
                           fontSize: 22,
@@ -126,22 +123,12 @@ class _exploreScreen extends State<DestinationList> with TickerProviderStateMixi
         ),
         body: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                colors: [
-                  Color(0xFF0a0a0a),
-                  Color(0xFF0d0d0d),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              )),
-            ),
-            FutureBuilder(
+            BG(),
+            FutureBuilder<List<DestinationModel>>(
               future: getDestinations(widget.menuOption),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<List<DestinationModel>> snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data.docs.isEmpty) {
+                  if (snapshot.data.isEmpty) {
                     return DefaultCard(
                       Icons.hourglass_empty,
                       widget.menuOption == "Explore"
@@ -152,18 +139,25 @@ class _exploreScreen extends State<DestinationList> with TickerProviderStateMixi
                     return Stack(
                       children: [
                         ListView.builder(
-                          itemCount: snapshot.data.docs.length + 1,
+                          itemCount: snapshot.data.length + 1,
                           itemBuilder: (context, index) {
-                            if (index == snapshot.data.docs.length) {
+                            if (index == snapshot.data.length) {
                               return SizedBox(height: 80);
                             } else {
                               return GestureDetector(
-                                onTap: () async {},
+                                onTap: () async {
+                                  Navigator.push(
+                                    context,
+                                    new MaterialPageRoute(
+                                      builder: (context) => DestinationDetailScreen(snapshot.data[index].id, snapshot.data[index].name),
+                                    ),
+                                  );
+                                },
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 20.0),
                                   child: Column(
                                     children: [
-                                      DestinationImage(snapshot.data.docs[index]["imageURL"]),
+                                      DestinationImage(snapshot.data[index].imageURL),
                                       Padding(
                                         padding: EdgeInsets.fromLTRB(0, MediaQuery.of(context).size.height * 0.008, 0, 0),
                                         child: Row(
@@ -172,27 +166,14 @@ class _exploreScreen extends State<DestinationList> with TickerProviderStateMixi
                                             SizedBox(
                                               width: MediaQuery.of(context).size.width * 0.07,
                                             ),
-                                            Text(
-                                              snapshot.data.docs[index]["location"],
-                                              style: GoogleFonts.montserrat(
-                                                textStyle: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.white,
-                                                  shadows: <Shadow>[
-                                                    Shadow(
-                                                      offset: Offset(0.0, 0.0),
-                                                      blurRadius: 8,
-                                                      color: Colors.white.withOpacity(0.8),
-                                                    ),
-                                                    Shadow(
-                                                      offset: Offset(0.0, 0.0),
-                                                      blurRadius: 20,
-                                                      color: Colors.white.withOpacity(0.8),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
+                                            GlowText(snapshot.data[index].name, 16),
+                                            Spacer(),
+                                            widget.menuOption == "To Visit"
+                                                ? Padding(
+                                                    padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * 0.07, 0),
+                                                    child: GlowText(snapshot.data[index].date.toDate().toString().substring(0, 11), 16),
+                                                  )
+                                                : Container(),
                                           ],
                                         ),
                                       ),
@@ -227,7 +208,7 @@ class _exploreScreen extends State<DestinationList> with TickerProviderStateMixi
                                 )),
                           ),
                         ),
-                        Search(searchClicked, _searchController, _searchBoxAnimation, snapshot.data.docs),
+                        Search(searchClicked, _searchController, _searchBoxAnimation, snapshot.data),
                       ],
                     );
                   }

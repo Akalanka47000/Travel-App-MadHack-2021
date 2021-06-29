@@ -14,9 +14,6 @@ class DestinationImage extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(0.0),
-        // boxShadow: <BoxShadow>[
-        //   BoxShadow(color: Colors.black.withAlpha(100), offset: Offset(0, 0), blurRadius: 6, spreadRadius: -6),
-        // ],
       ),
       child: Stack(
         fit: StackFit.expand,
