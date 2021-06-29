@@ -194,7 +194,7 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.05, MediaQuery.of(context).size.height * 0.03, MediaQuery.of(context).size.width * 0.05,
-                                      MediaQuery.of(context).size.height * 0.05),
+                                      MediaQuery.of(context).size.height * 0.03),
                                   child: Table(
                                     border: TableBorder.all(),
                                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
