@@ -199,7 +199,7 @@ class _DestinationDetailScreenState extends State<DestinationDetailScreen> {
                                     border: TableBorder.all(),
                                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                                     children: [
-                                      buildTableRow("Event Date", snapshot.data.date.toDate().toString().substring(0, 11)),
+                                      buildTableRow("Date", snapshot.data.date.toDate().toString().substring(0, 11)),
                                       buildTableRow("Time", snapshot.data.date.toDate().toString().substring(11, 16)),
                                       buildTableRow("Capacity", "${snapshot.data.attendees.length}/${snapshot.data.capacity} People"),
                                       buildTableRow("Contact", snapshot.data.contact),
